@@ -1,10 +1,11 @@
+'use client';
 import React from "react";
 import { ReactDiagram } from "gojs-react";
 import * as go from 'gojs'
+import * as DS from './Diagram.style'
 
 const $ = go.GraphObject.make;
 const TreeDiagram = () => {
-    function initDiagram() {
         // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
         const diagram =
           new go.Diagram(
@@ -17,6 +18,7 @@ const TreeDiagram = () => {
                   linkKeyProperty: 'key'  // IMPORTANT! must be defined for merges and data sync when using GraphLinksModel
                 })
             });
+        diagram.allowResize = true
         diagram.addDiagramListener("BackgroundContextClicked",(e: go.DiagramEvent) => {
 
             diagram.model.addNodeData({})
@@ -27,6 +29,8 @@ const TreeDiagram = () => {
             $(go.Panel, "Auto",
               $(go.Shape, "RoundedRectangle",
                 {
+                  width:250,
+                  height:150,
                   fill: "lightblue", // Default color
                   strokeWidth: 1, // Border width
                 },
@@ -47,12 +51,12 @@ const TreeDiagram = () => {
             makePort("R", go.Spot.Right, true, true),
             makePort("B", go.Spot.Bottom, true, true)
           );
-
-          function makePort(name, spot, output, input) {
+ 
+          function makePort(name: string, spot: go.Spot, output: boolean, input: boolean) {
             return $(go.Shape, "Circle",
               {
-                fill: "transparent", // Default color
-                stroke: null, // No border
+                fill: "white", // Default color
+                stroke: "black", // No border
                 desiredSize: new go.Size(8, 8),
                 alignment: spot, // Align the port on the given spot
                 alignmentFocus: spot, // Align focus on the same spot
@@ -62,21 +66,22 @@ const TreeDiagram = () => {
                 cursor: "pointer" // Show a pointer cursor when hovering over
               },
               // Optional: Change appearance on hover
-              new go.Binding("fill", "portColor").makeTwoWay()
+              new go.Binding("fill", "pink").makeTwoWay()
             );
         }
-        return diagram;
-      }
 
     return (
-        <>
-            <ReactDiagram 
-                divClassName="diagram-component"
-                initDiagram={initDiagram}
-                nodeDataArray={[]}
-                linkDataArray={[]}
-            />
-        </>
+       <DS.DiagramWrapper>
+         <ReactDiagram 
+            divClassName="diagram-component"
+            
+            initDiagram={() => {
+                return diagram
+            }}
+            nodeDataArray={[]}
+            linkDataArray={[]}
+        />
+       </DS.DiagramWrapper>
     )
 }
 
