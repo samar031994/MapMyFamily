@@ -3,6 +3,10 @@ import * as go from 'gojs'
 const $ = go.GraphObject.make;
 
 export const NodeTemplate = $(go.Node, "Spot",
+                {
+                    locationSpot: go.Spot.Center
+                },
+                new go.Binding('location', 'location').makeTwoWay(go.Point.stringify),
                 $(go.Panel, "Auto",
                   $(go.Shape, "RoundedRectangle",
                     {
@@ -13,7 +17,7 @@ export const NodeTemplate = $(go.Node, "Spot",
                     },
                     new go.Binding("fill", "gender", (g) => {
                         switch (g) {
-                            case 'male': return "#9AB5F3"
+                            case 'male': return "##2f316e"
                             break;
                             case 'female': return '#F39AC3'
                             break;
@@ -35,6 +39,7 @@ export const NodeTemplate = $(go.Node, "Spot",
                       ),
                         $(go.TextBlock,
                             {
+                                // textEditor: window.TextEditorSelectBox,
                                 margin: 8,
                                 font: "14px sans-serif",
                                 stroke: "black",
@@ -84,14 +89,38 @@ export const NodeTemplate = $(go.Node, "Spot",
                 makePort("B", go.Spot.Bottom, true, true)
             ); 
 
-export const LinkTemplate = $(go.Link,
-    {
-        routing: go.Routing.AvoidsNodes,
-        reshapable: true,
-        resegmentable: true,
-        segmentIndex: 2
+export const LinkTemplate = new go.Link({
+    routing: go.Routing.AvoidsNodes,
+    curve: go.Curve.JumpOver,
+    corner: 5,
+    toShortLength: 4,
+    relinkableFrom: true,
+    toEndSegmentLength: 0,
+    relinkableTo: true,
+    reshapable: true,
+    resegmentable: true,
+    // mouse-overs subtly highlight links:
+    // mouseEnter: (e:go.InputEvent, link) => (link.findObject('HIGHLIGHT').stroke = link.diagram.themeManager.findValue('linkOver', 'colors')),
+    // mouseLeave: (e, link) => (link.findObject('HIGHLIGHT').stroke = 'transparent'),
+    // context-click creates an editable link label
+    contextClick: (e, link) => {
+      e.diagram.model.commit((m) => {
+        m.set(link.data, 'text', 'Label');
+      });
     }
-)
+  })
+    .bindTwoWay('points')
+    .add(
+      // the highlight shape, normally transparent
+      new go.Shape({
+        isPanelMain: true,
+        strokeWidth: 8,
+        stroke: 'transparent',
+        name: 'HIGHLIGHT'
+      }),
+      // the link path shape
+      new go.Shape({ isPanelMain: true, strokeWidth: 2 })
+    );
 
 function makePort(name: string, spot: go.Spot, output: boolean, input: boolean) {
     return $(go.Shape, "Circle",

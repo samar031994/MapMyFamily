@@ -1,10 +1,11 @@
 import React from "react";
+import * as go from 'gojs'
 
 export interface TreeNodeType {
     key: string
     firstName: string
     lastName: string
-    location: string
+    location: go.Point
 }
 
 export interface TreeLinkType {

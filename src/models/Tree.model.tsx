@@ -6,13 +6,14 @@ export interface NodeModelType {
     birthYear: string,
     deathYear: string,
     city: string
-    gender: string
+    gender: string,
+    location: string
 }
 
 export interface LinkModelType {
     key: string,
-    fromNode: "string",
-    toNode: "string",
-    fromPort: "string",
-    toPort: "string"
+    fromNode: string,
+    toNode: string,
+    fromPort: string,
+    toPort: string
 }
