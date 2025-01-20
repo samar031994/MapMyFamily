@@ -5,6 +5,8 @@ import * as go from 'gojs'
 import * as DS from './Diagram.style'
 import Taskbar from '../Taskbar/Taskbar'
 import { NodeTemplate, LinkTemplate } from "@/templates/TreeTemplate";
+import { LinkLabelType, TreeNodeType } from "./Tree.Model";
+import { generateNewNode, getLargestKey } from "@/utils/Diagram.utils";
 
 const $ = go.GraphObject.make;
 const TreeDiagram = () => {
@@ -26,10 +28,16 @@ const TreeDiagram = () => {
                   nodeKeyProperty: "key",
                 })
             });
+        diagram.grid.background = '#cbdff2'
+        diagram.setDivBackground('#cbdff2')          
         diagram.allowResize = true
         diagram.grid.visible = false;
         diagram.grid.gridCellSize = new go.Size(10, 20);
         diagram.toolManager.draggingTool.isGridSnapEnabled = true
+        diagram.addDiagramListener("ObjectSingleClicked", (e: go.DiagramEvent) => {
+          console.log(e.diagram.model.nodeDataArray)
+          console.log((e.diagram.model as go.GraphLinksModel).linkDataArray)
+        })
         diagram.addDiagramListener("BackgroundContextClicked",(e: go.DiagramEvent) => {
             e.diagram.lastInput.viewPoint && diagram.model.addNodeData(generateNewNode(e.diagram.lastInput.documentPoint))
         })
@@ -57,18 +65,12 @@ const TreeDiagram = () => {
             )
         );
         diagram.toolManager.linkingTool.archetypeLabelNodeData = { category: 'LinkLabel' };
-    const generateNewNode = (mouseLoc: go.Point) => {
-      const newNode = {
-        name: "name",
-        gender: "gender",
-        birthYear: "2000",
-        deathYear: "2000",
-        city: "",
-        location: mouseLoc
-      }
-      return newNode
-    }
-
+        (diagram.model as go.GraphLinksModel).makeUniqueLinkKeyFunction = (m: go.GraphLinksModel, data: go.ObjectData) => {
+          return `link:${getLargestKey(m.linkDataArray)}`
+        }
+        diagram.model.makeUniqueKeyFunction = (m: go.Model, data: go.ObjectData) => {
+          return `node:${getLargestKey(m.nodeDataArray)}`
+        }
 
     return (
       <>
@@ -76,7 +78,6 @@ const TreeDiagram = () => {
           <Taskbar />
           <ReactDiagram 
               divClassName="diagram-component"
-              
               initDiagram={() => {
                   return diagram
               }}

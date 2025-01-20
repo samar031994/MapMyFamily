@@ -6,6 +6,7 @@ export interface TreeNodeType {
     firstName: string
     lastName: string
     location: go.Point
+    category: string
 }
 
 export interface TreeLinkType {
@@ -14,4 +15,11 @@ export interface TreeLinkType {
     toNode: string
     portId: string
     points: string
+    category: string
 }
+
+export interface LinkLabelType {
+    linkKey: string
+    category: string
+    labelKey: string
+} 
