@@ -12,22 +12,24 @@ export const NodeTemplate = $(go.Node, "Spot",
                     {
                       width:250,
                       height:150,
-                      fill: "#EBE6E4", // Default color
+                      fill: "#96e890", // Default color
                       strokeWidth: 1, // Border width
                     },
                     new go.Binding("fill", "gender", (g) => {
                         switch (g) {
-                            case 'male': return "##2f316e"
+                            case 'male': return "#587ff5"
                             break;
-                            case 'female': return '#F39AC3'
+                            case 'female': return '#f556dd'
                             break;
-                            default: return 'gray'
+                            default: return '#96e890'
                         }
                     })
                   ),
                   $(go.Panel, "Vertical").add(
                     $(go.TextBlock, //Name textBlock
                         {
+                          cursor: 'pointer',
+                          isMultiline: false,
                           margin: 8,
                           font: "bold 16px sans-serif",
                           stroke: "black",
@@ -41,6 +43,8 @@ export const NodeTemplate = $(go.Node, "Spot",
                             {
                                 // textEditor: window.TextEditorSelectBox,
                                 margin: 8,
+                                cursor: 'pointer',
+                                isMultiline: false,
                                 font: "14px sans-serif",
                                 stroke: "black",
                                 editable: true,
@@ -52,6 +56,8 @@ export const NodeTemplate = $(go.Node, "Spot",
                     $(go.Panel, "Horizontal",
                         $(go.TextBlock,
                             {
+                                cursor: 'pointer',
+                                isMultiline: false,
                                 margin: 4,
                                 font: "10px sans-serif",
                                 stroke: "black",
@@ -63,6 +69,8 @@ export const NodeTemplate = $(go.Node, "Spot",
                         ),
                         $(go.TextBlock,
                             {
+                                cursor: 'pointer',
+                                isMultiline: false,
                                 text: " - ",
                                 font: "10px sans-serif",
                                 editable: false
@@ -70,6 +78,8 @@ export const NodeTemplate = $(go.Node, "Spot",
                         ),
                         $(go.TextBlock,
                             {
+                                cursor: 'pointer',
+                                isMultiline: false,
                                 margin: 4,
                                 font: "10px sans-serif",
                                 stroke: "black",
@@ -103,11 +113,6 @@ export const LinkTemplate = new go.Link({
     // mouseEnter: (e:go.InputEvent, link) => (link.findObject('HIGHLIGHT').stroke = link.diagram.themeManager.findValue('linkOver', 'colors')),
     // mouseLeave: (e, link) => (link.findObject('HIGHLIGHT').stroke = 'transparent'),
     // context-click creates an editable link label
-    contextClick: (e, link) => {
-      e.diagram.model.commit((m) => {
-        m.set(link.data, 'text', 'Label');
-      });
-    }
   })
     .bindTwoWay('points')
     .add(

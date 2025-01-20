@@ -3,6 +3,7 @@ import React from "react";
 import { ReactDiagram } from "gojs-react";
 import * as go from 'gojs'
 import * as DS from './Diagram.style'
+import Taskbar from '../Taskbar/Taskbar'
 import { NodeTemplate, LinkTemplate } from "@/templates/TreeTemplate";
 
 const $ = go.GraphObject.make;
@@ -50,7 +51,7 @@ const TreeDiagram = () => {
                 stroke: null,
                 portId: '',
                 fromLinkable: true,
-                toLinkable: true,
+                toLinkable: false,
                 cursor: 'pointer'
               })
             )
@@ -70,7 +71,9 @@ const TreeDiagram = () => {
 
 
     return (
+      <>
        <DS.DiagramWrapper>
+          <Taskbar />
           <ReactDiagram 
               divClassName="diagram-component"
               
@@ -81,6 +84,7 @@ const TreeDiagram = () => {
               linkDataArray={[]}
           />
        </DS.DiagramWrapper>
+      </>
     )
 }
 
