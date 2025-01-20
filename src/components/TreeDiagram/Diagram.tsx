@@ -1,5 +1,5 @@
 'use client';
-import React from "react";
+import React, { useRef } from "react";
 import { ReactDiagram } from "gojs-react";
 import * as go from 'gojs'
 import * as DS from './Diagram.style'
@@ -7,9 +7,14 @@ import Taskbar from '../Taskbar/Taskbar'
 import { NodeTemplate, LinkTemplate } from "@/templates/TreeTemplate";
 import { LinkLabelType, TreeNodeType } from "./Tree.Model";
 import { generateNewNode, getLargestKey } from "@/utils/Diagram.utils";
+import * as TA from '../../models/Tree.atoms'
+import { useAtom } from "jotai";
+import { convertDiagramData } from '@/utils/Diagram.utils'
+import { LinkModelType } from "@/models/Tree.model";
 
 const $ = go.GraphObject.make;
 const TreeDiagram = () => {
+  const [diagramModel, setDiagramModel] = useAtom(TA.DiagramDataAtom)
         // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
         const diagram =
           new go.Diagram(
@@ -71,11 +76,11 @@ const TreeDiagram = () => {
         diagram.model.makeUniqueKeyFunction = (m: go.Model, data: go.ObjectData) => {
           return `node:${getLargestKey(m.nodeDataArray)}`
         }
-
+        const diagramRef = useRef(diagram)
     return (
       <>
        <DS.DiagramWrapper>
-          <Taskbar />
+          <Taskbar diagramRef={diagramRef}/>
           <ReactDiagram 
               divClassName="diagram-component"
               initDiagram={() => {

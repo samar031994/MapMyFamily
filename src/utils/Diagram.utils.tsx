@@ -1,5 +1,6 @@
 import React from "react";
 import * as go from 'gojs'
+import { LinkModelType, NodeModelType } from "@/models/Tree.model";
 
 export const getLargestKey = (arr: go.ObjectData[]) => {
     let largest = 1
@@ -25,4 +26,11 @@ export const generateNewNode = (mouseLoc: go.Point) => {
     category: "Node"
     }
     return newNode
+}
+
+export const convertDiagramData = (nodeDataArray: NodeModelType[], linkDataArray: LinkModelType[]) => {
+    return {
+        "nodes": nodeDataArray,
+        "links": linkDataArray
+    }
 }

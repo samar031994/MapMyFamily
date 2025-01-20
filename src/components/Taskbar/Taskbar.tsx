@@ -5,7 +5,7 @@ import { Button, Offcanvas } from "react-bootstrap";
 import { useAtom } from "jotai";
 import TreePopoutMenu from "../OffCanvas/TreePopoutMenu";
 
-const Taskbar = () => {
+const Taskbar = ({diagramRef}: {diagramRef: React.RefObject<go.Diagram>}) => {
     const [show, setShow] = useAtom(TA.MenuAtom);
     const handleShow = () => setShow(true);
     return (
@@ -17,7 +17,7 @@ const Taskbar = () => {
                     </TS.ExpandButton>
                 </TS.TaskbarContainer>
             </TS.TaskbarNav>
-            <TreePopoutMenu></TreePopoutMenu>
+            <TreePopoutMenu diagramRef={diagramRef}></TreePopoutMenu>
         </TS.TaskbarWrapper>
     )
 }
