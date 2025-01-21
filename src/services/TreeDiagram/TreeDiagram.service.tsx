@@ -10,7 +10,7 @@ export const saveDiagram = (diagramData: any) => {
     const apiRoute = apiBase + "tree_diagram/"
     const response = fetch(apiRoute, {
         method:"POST",
-        // headers: {"content-type": "application/json"},
+        headers: {"content-type": "application/json"},
         body: JSON.stringify({
             "model_data": diagramData,
             "users": ["12345"]
@@ -21,6 +21,7 @@ export const saveDiagram = (diagramData: any) => {
             "statusText": res.statusText
         })
     }).catch((err) => {
+        console.log("Error saving diagram")
         console.error(err)
     })
 }
