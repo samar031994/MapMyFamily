@@ -5,12 +5,9 @@ import * as go from 'gojs'
 import * as DS from './Diagram.style'
 import Taskbar from '../Taskbar/Taskbar'
 import { NodeTemplate, LinkTemplate } from "@/templates/TreeTemplate";
-import { LinkLabelType, TreeNodeType } from "./Tree.Model";
 import { generateNewNode, getLargestKey } from "@/utils/Diagram.utils";
 import * as TA from '../../models/Tree.atoms'
 import { useAtom } from "jotai";
-import { convertDiagramData } from '@/utils/Diagram.utils'
-import { LinkModelType } from "@/models/Tree.model";
 
 const $ = go.GraphObject.make;
 const TreeDiagram = () => {
