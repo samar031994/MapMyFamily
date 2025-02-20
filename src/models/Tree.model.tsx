@@ -17,3 +17,8 @@ export interface LinkModelType {
     fromPort: string,
     toPort: string
 }
+
+export interface DiagramModelType {
+    nodes: NodeModelType[],
+    links: LinkModelType[]
+}
