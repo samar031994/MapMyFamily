@@ -98,12 +98,7 @@ const LandingPage: React.FC = () => {
           </Button>
         </Container>
       </section>
-      <Tooltip
-        id="contactTooltip"
-        place="right"
-        visible={tooltipVisible}
-        variant="light"
-      >
+      <Tooltip id="contactTooltip" place="right" variant="light">
         Email: sam.manjeshwar@gmail.com
       </Tooltip>
       <footer className="text-center py-3 bg-light">
