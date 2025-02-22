@@ -10,7 +10,7 @@ html {
 
 #__next {
   height: fit-content;
-  width: fit-content;
+  width: 100%;
 }
 
  .diagram-component {
