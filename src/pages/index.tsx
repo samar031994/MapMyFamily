@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container, Row, Col, Button, Navbar, Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import * as TS from "../components/Taskbar/Taskbar.style";
+import { Tooltip } from "react-tooltip";
 
 const LandingPage: React.FC = () => {
   const router = useRouter();
+  const [tooltipVisible, setTooltipVisible] = useState(false);
   return (
     <>
       <TS.TaskbarNav bg="dark" variant="dark" expand="lg">
@@ -85,10 +87,25 @@ const LandingPage: React.FC = () => {
         <Container>
           <h2>Get in Touch</h2>
           <p>Have questions? Contact us for more details.</p>
-          <Button variant="light">Contact Us</Button>
+          <Button
+            data-tooltip-id="contactTooltip"
+            variant="light"
+            onClick={() => {
+              setTooltipVisible(!tooltipVisible);
+            }}
+          >
+            Contact Us
+          </Button>
         </Container>
       </section>
-
+      <Tooltip
+        id="contactTooltip"
+        place="right"
+        visible={tooltipVisible}
+        variant="light"
+      >
+        Email: sam.manjeshwar@gmail.com
+      </Tooltip>
       <footer className="text-center py-3 bg-light">
         <Container>
           <p>&copy; 2025 MapMyFamily. All Rights Reserved.</p>
