@@ -16,6 +16,7 @@
     "gojs-react": "^1.1.2",
     "jotai": "^2.11.1",
     "next": "15.1.4",
+    "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.7",
     "react-chatbot": "^0.0.1",
