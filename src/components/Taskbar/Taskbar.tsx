@@ -3,6 +3,8 @@ import * as TA from "../../models/Tree.atoms";
 import * as TS from "./Taskbar.style";
 import { useAtom } from "jotai";
 import TreePopoutMenu from "../OffCanvas/TreePopoutMenu";
+import LoginBtn from "../LoginBtn";
+import Image from "next/image";
 
 const Taskbar = ({
   diagramRef,
@@ -16,8 +18,16 @@ const Taskbar = ({
       <TS.TaskbarNav expand="x-lg">
         <TS.TaskbarContainer>
           <TS.ExpandButton onClick={handleShow} variant="Light">
-            MapMyFamily
+            <Image
+              src={"/right-arrow.svg"}
+              width={"20"}
+              height={"20"}
+              alt="Expand Menu"
+            />
           </TS.ExpandButton>
+        </TS.TaskbarContainer>
+        <TS.TaskbarContainer>
+          <LoginBtn />
         </TS.TaskbarContainer>
       </TS.TaskbarNav>
       <TreePopoutMenu diagramRef={diagramRef}></TreePopoutMenu>

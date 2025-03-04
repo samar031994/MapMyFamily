@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fortawesome/react-fontawesome": "^0.2.2",
     "@types/styled-components": "^5.1.34",
     "bootstrap": "^5.3.3",
+    "fontawesome": "^5.6.3",
     "framer-motion": "^12.4.6",
     "gojs": "^3.0.16",
     "gojs-react": "^1.1.2",
@@ -22,13 +24,15 @@
     "react-chatbot": "^0.0.1",
     "react-dom": "^19.0.0",
     "react-tooltip": "^5.28.0",
-    "styled-components": "^6.1.14"
+    "styled-components": "^6.1.14",
+    "tailwind": "^4.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-fontawesome": "^1.6.8",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",
     "typescript": "^5"
