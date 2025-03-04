@@ -7,6 +7,7 @@ import Button from "react-bootstrap/Button";
 import { saveDiagram } from "@/services/TreeDiagram/TreeDiagram.service";
 import { convertDiagramData } from "@/utils/Diagram.utils";
 import { LinkModelType, NodeModelType } from "@/models/Tree.model";
+import { useRouter } from "next/router";
 
 const TreePopoutMenu = ({
   diagramRef,
@@ -15,6 +16,8 @@ const TreePopoutMenu = ({
 }) => {
   const [show, setShow] = useAtom(TA.MenuAtom);
   const handleClose = () => setShow(false);
+  const router = useRouter();
+  const dia_id = router.query["treeId"];
 
   return (
     <TPS.OffCanvasWrapper show={show} onHide={handleClose}>
@@ -28,10 +31,10 @@ const TreePopoutMenu = ({
             const diaToSave = convertDiagramData(
               diagramRef.current?.model.nodeDataArray as NodeModelType[],
               (diagramRef.current?.model as go.GraphLinksModel)
-                .linkDataArray as LinkModelType[]
+                .linkDataArray as LinkModelType[],
+              dia_id as string
             );
-            console.log(diaToSave);
-            saveDiagram(diaToSave);
+            dia_id !== "sandbox" && saveDiagram(diaToSave);
           }}
         >
           Save Diagram
