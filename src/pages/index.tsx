@@ -48,7 +48,7 @@ const LandingPage: React.FC = () => {
             variant="primary"
             size="lg"
             onClick={() => {
-              router.push("/familyTree/1234");
+              router.push("/familyTree/sandbox");
             }}
           >
             Get Started
