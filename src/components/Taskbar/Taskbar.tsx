@@ -26,9 +26,9 @@ const Taskbar = ({
             />
           </TS.ExpandButton>
         </TS.TaskbarContainer>
-        <TS.TaskbarContainer>
+        <TS.TaskbarContainerAuth>
           <LoginBtn />
-        </TS.TaskbarContainer>
+        </TS.TaskbarContainerAuth>
       </TS.TaskbarNav>
       <TreePopoutMenu diagramRef={diagramRef}></TreePopoutMenu>
     </TS.TaskbarWrapper>
