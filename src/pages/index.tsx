@@ -5,13 +5,14 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import * as TS from "../components/Taskbar/Taskbar.style";
 import { Tooltip } from "react-tooltip";
+import LoginBtn from "@/components/LoginBtn";
 
 const LandingPage: React.FC = () => {
   const router = useRouter();
   const [tooltipVisible, setTooltipVisible] = useState(false);
   return (
     <>
-      <TS.TaskbarNav bg="dark" variant="dark" expand="lg">
+      <TS.TaskbarNav expand="lg">
         <Container>
           <Navbar.Brand href="#logo">
             <Image
@@ -25,8 +26,7 @@ const LandingPage: React.FC = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link href="#features">Features</Nav.Link>
-              <Nav.Link href="#contact">Contact</Nav.Link>
+              <LoginBtn />
             </Nav>
           </Navbar.Collapse>
         </Container>
