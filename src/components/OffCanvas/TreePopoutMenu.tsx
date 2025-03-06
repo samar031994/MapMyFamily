@@ -34,26 +34,7 @@ const TreePopoutMenu = ({
           />
         </Offcanvas.Title>
       </TPS.OffCanvasHeader>
-      <OffCanvasTabs />
-      {/* <TPS.OffCanvasHeader closeButton>
-        <Offcanvas.Title>MapMyFamily</Offcanvas.Title>
-      </TPS.OffCanvasHeader>
-      <Offcanvas.Body>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            const diaToSave = convertDiagramData(
-              diagramRef.current?.model.nodeDataArray as NodeModelType[],
-              (diagramRef.current?.model as go.GraphLinksModel)
-                .linkDataArray as LinkModelType[],
-              dia_id as string
-            );
-            dia_id !== "sandbox" && saveDiagram(diaToSave);
-          }}
-        >
-          Save Diagram
-        </Button>
-      </Offcanvas.Body> */}
+      <OffCanvasTabs diagramRef={diagramRef} />
     </TPS.OffCanvasWrapper>
   );
 };
