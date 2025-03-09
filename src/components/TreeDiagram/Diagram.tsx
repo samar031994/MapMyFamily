@@ -16,6 +16,7 @@ import { useAtom } from "jotai";
 const $ = go.GraphObject.make;
 const TreeDiagram = () => {
   const [diagramModel, setDiagramModel] = useAtom(TA.DiagramDataAtom);
+  const [show, setShow] = useAtom(TA.MenuAtom);
   // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
   const diagram = new go.Diagram({
     "undoManager.isEnabled": true, // must be set to allow for model change listening
@@ -34,16 +35,17 @@ const TreeDiagram = () => {
       nodeKeyProperty: "key",
     }),
   });
+  const diagramRef = useRef(diagram);
   diagram.grid.background = "#cbdff2";
   diagram.setDivBackground("#cbdff2");
   diagram.allowResize = true;
   diagram.grid.visible = false;
   diagram.grid.gridCellSize = new go.Size(10, 20);
   diagram.toolManager.draggingTool.isGridSnapEnabled = true;
-  diagram.addDiagramListener("ObjectSingleClicked", (e: go.DiagramEvent) => {
-    console.log(e.diagram.model.nodeDataArray);
-    console.log((e.diagram.model as go.GraphLinksModel).linkDataArray);
-  });
+  // diagram.addDiagramListener("ObjectSingleClicked", (e: go.DiagramEvent) => {
+  //   console.log(diagramRef.current.getDiagram().model.data);
+  //   setShow(true);
+  // });
   diagram.addDiagramListener(
     "BackgroundContextClicked",
     (e: go.DiagramEvent) => {
@@ -56,10 +58,7 @@ const TreeDiagram = () => {
   // define a simple Node template
   diagram.nodeTemplate = NodeTemplate;
   diagram.linkTemplate = LinkTemplate;
-  diagram.nodeTemplateMap.add(
-    "LinkLabel",
-    LinkNodeTemplate
-  );
+  diagram.nodeTemplateMap.add("LinkLabel", LinkNodeTemplate);
   diagram.toolManager.linkingTool.archetypeLabelNodeData = {
     category: "LinkLabel",
   };
@@ -72,12 +71,13 @@ const TreeDiagram = () => {
   diagram.model.makeUniqueKeyFunction = (m: go.Model, data: go.ObjectData) => {
     return `node:${getLargestKey(m.nodeDataArray)}`;
   };
-  const diagramRef = useRef(diagram);
+
   return (
     <>
       <DS.DiagramWrapper>
         <Taskbar diagramRef={diagramRef} />
         <ReactDiagram
+          // ref={diagramRef}
           divClassName="diagram-component"
           initDiagram={() => {
             return diagram;

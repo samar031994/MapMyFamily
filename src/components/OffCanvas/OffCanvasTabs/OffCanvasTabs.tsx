@@ -3,6 +3,7 @@ import EditIconSVG from "./EditIconSVG";
 import FileIconSVG from "./FileIconSVG";
 import InfoSVG from "./InfoSVG";
 import OffCanvasPanelFile from "./OffCanvasPanel/OffCanvasPanelFile";
+import OffCanvasPanelProperties from "./OffCanvasPanel/OffCanvasPanelProperties";
 
 const OffCanvasTabs = ({
   diagramRef,
@@ -11,7 +12,7 @@ const OffCanvasTabs = ({
 }) => {
   return (
     <>
-      <Tabs defaultValue={"file"} radius={"xs"} color="black">
+      <Tabs defaultValue={"properties"} radius={"xs"} color="black">
         <Tabs.List grow>
           <Tabs.Tab value="file" leftSection={<FileIconSVG />}>
             File
@@ -25,6 +26,9 @@ const OffCanvasTabs = ({
         </Tabs.List>
         <Tabs.Panel value="file">
           <OffCanvasPanelFile diagramRef={diagramRef} />
+        </Tabs.Panel>
+        <Tabs.Panel value="properties">
+          <OffCanvasPanelProperties />
         </Tabs.Panel>
       </Tabs>
     </>
