@@ -16,7 +16,7 @@ const OffCanvasPanelFile = ({
   return (
     <S.PanelWrapper>
       <Button
-        style={{ margin: "4px 0 0 0" }}
+        style={{ margin: "6px 0 0 6px", width: "50%" }}
         onClick={() => {
           const diaToSave = convertDiagramData(
             diagramRef.current?.model.nodeDataArray as NodeModelType[],
@@ -29,8 +29,8 @@ const OffCanvasPanelFile = ({
       >
         Save
       </Button>
-      <Button style={{ margin: "4px 0 0 0" }}>Open</Button>
-      <Button style={{ margin: "4px 0 0 0" }}>New</Button>
+      <Button style={{ margin: "6px 0 0 6px", width: "50%" }}>Open</Button>
+      <Button style={{ margin: "6px 0 0 6px", width: "50%" }}>New</Button>
     </S.PanelWrapper>
   );
 };
