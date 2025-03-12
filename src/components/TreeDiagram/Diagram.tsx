@@ -77,13 +77,15 @@ const TreeDiagram = () => {
       <DS.DiagramWrapper>
         <Taskbar diagramRef={diagramRef} />
         <ReactDiagram
-          // ref={diagramRef}
+          //ref={diagramRef}
           divClassName="diagram-component"
           initDiagram={() => {
             return diagram;
           }}
-          nodeDataArray={[]}
-          linkDataArray={[]}
+          nodeDataArray={diagramRef.current.model.nodeDataArray}
+          linkDataArray={
+            (diagramRef.current.model as go.GraphLinksModel).linkDataArray
+          }
         />
       </DS.DiagramWrapper>
     </>

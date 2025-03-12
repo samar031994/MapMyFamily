@@ -5,12 +5,14 @@ import { convertDiagramData } from "@/utils/Diagram.utils";
 import { LinkModelType, NodeModelType } from "@/models/Tree.model";
 import { useRouter } from "next/router";
 import { saveDiagram } from "@/services/TreeDiagram/TreeDiagram.service";
+import { useSession } from "next-auth/react";
 
 const OffCanvasPanelFile = ({
   diagramRef,
 }: {
   diagramRef: React.RefObject<go.Diagram>;
 }) => {
+  const { data } = useSession();
   const router = useRouter();
   const dia_id = router.query["treeId"];
   return (
@@ -18,13 +20,23 @@ const OffCanvasPanelFile = ({
       <Button
         style={{ margin: "6px 0 0 6px", width: "50%" }}
         onClick={() => {
-          const diaToSave = convertDiagramData(
-            diagramRef.current?.model.nodeDataArray as NodeModelType[],
-            (diagramRef.current?.model as go.GraphLinksModel)
-              .linkDataArray as LinkModelType[],
-            dia_id as string
-          );
-          dia_id !== "sandbox" && saveDiagram(diaToSave);
+          if (data?.user) {
+            const diaToSave = convertDiagramData(
+              diagramRef.current?.model.nodeDataArray as NodeModelType[],
+              (diagramRef.current?.model as go.GraphLinksModel)
+                .linkDataArray as LinkModelType[],
+              dia_id as string
+            );
+            const saveJson = {
+              modelData: diaToSave,
+              diagramId: dia_id,
+              savedBy: data.user.email,
+            }
+            dia_id !== "sandbox" && saveDiagram(saveJson, data, dia_id as string);
+          }
+          else {
+            // TODO: Prompt sign in or add snackbar error message
+          }
         }}
       >
         Save
