@@ -34,7 +34,6 @@ export const convertDiagramData = (
   dia_id: string
 ) => {
   return {
-    diagramID: dia_id,
     nodes: nodeDataArray,
     links: linkDataArray,
   };
