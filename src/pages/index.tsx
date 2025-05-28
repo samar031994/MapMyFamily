@@ -6,9 +6,41 @@ import { useRouter } from "next/router";
 import * as TS from "../components/Taskbar/Taskbar.style";
 import { Tooltip } from "react-tooltip";
 import LoginBtn from "@/components/LoginBtn";
+import { useSession } from "next-auth/react";
+
+const generateNewDiagramId = async (email: string) => {
+  const diagrams = await fetch("/api/mongo/getAllUserDiagrams?email=" + email)
+    .then((res) => {
+      console.log(res)
+      if (res.status === 404) {
+        console.log("No diagrams found for this user.");
+        // If no diagrams are found, return an empty array
+        return [];
+      }
+      return res.json();
+    })
+    .catch((err) => {
+      console.log("ERROR");
+      console.log(err);
+    });
+  if (!diagrams || diagrams.length === 0) {
+    console.log("No diagrams found for this user, creating a new one.");
+    console.log(email)
+    return `${email}_diagram_${1}`;
+  }
+  if (diagrams) {
+    console.log(diagrams);
+    diagrams.forEach((dia) => {
+      const counter =
+        dia.diagramId.split("_")[dia.diagramId.split("_").length - 1];
+      return `${email}_diagram_${counter + 1}`;
+    });
+  }
+};
 
 const LandingPage: React.FC = () => {
   const router = useRouter();
+  const { data } = useSession();
   const [tooltipVisible, setTooltipVisible] = useState(false);
   return (
     <>
@@ -44,15 +76,49 @@ const LandingPage: React.FC = () => {
           <p className="lead">
             A powerful web application to map and explore your family tree.
           </p>
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => {
-              router.push("/familyTree/sandbox");
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            Get Started
-          </Button>
+            <Button
+              style={{ width: "20%", margin: "10px" }}
+              variant="primary"
+              size="lg"
+              onClick={() => {
+                router.push("/familyTree/sandbox");
+              }}
+            >
+              Get Started
+            </Button>
+            {data?.user && (
+              <Button
+                style={{ width: "20%" }}
+                variant="primary"
+                size="lg"
+                onClick={() => router.replace("/dashboard")}
+              >
+                Dashboard
+              </Button>
+            )}
+            {data?.user && (
+              <Button
+                style={{ width: "20%", margin: "10px" }}
+                variant="primary"
+                size="lg"
+                onClick={async () => {
+                  const newKey = await generateNewDiagramId(data?.user?.email);
+                  console.log(newKey)
+                  router.replace("/familyTree/" + newKey);
+                }}
+              >
+                New Diagram
+              </Button>
+            )}
+          </div>
         </Container>
       </header>
 

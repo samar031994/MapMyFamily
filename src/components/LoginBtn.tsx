@@ -33,7 +33,9 @@ const LoginBtn = () => {
           >
             Home
           </Menu.Item>
-          <Menu.Item>Dashboard</Menu.Item>
+          <Menu.Item onClick={() => {
+            router.replace("/dashboard");
+          }}>Dashboard</Menu.Item>
         </Menu.Dropdown>
       </Menu>
     );
