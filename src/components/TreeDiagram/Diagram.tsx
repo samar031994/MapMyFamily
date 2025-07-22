@@ -11,11 +11,15 @@ import {
 } from "@/templates/TreeTemplate";
 import { generateNewNode, getLargestKey } from "@/utils/Diagram.utils";
 import * as TA from "../../models/Tree.atoms";
+import * as G from "../Global.atoms"
 import { useAtom } from "jotai";
+import { NodeModelType } from "@/models/Tree.model";
+
 
 const $ = go.GraphObject.make;
 const TreeDiagram = () => {
   const [diagramModel, setDiagramModel] = useAtom(TA.DiagramDataAtom);
+  const [currentNode, setCurrentNode] = useAtom(G.SelectedNodeAtom);
   const [show, setShow] = useAtom(TA.MenuAtom);
   // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
   const diagram = new go.Diagram({
@@ -42,19 +46,23 @@ const TreeDiagram = () => {
   diagram.grid.visible = false;
   diagram.grid.gridCellSize = new go.Size(10, 20);
   diagram.toolManager.draggingTool.isGridSnapEnabled = true;
-  // diagram.addDiagramListener("ObjectSingleClicked", (e: go.DiagramEvent) => {
-  //   console.log(diagramRef.current.getDiagram().model.data);
-  //   setShow(true);
-  // });
+  diagram.addDiagramListener("ObjectSingleClicked", (e: go.DiagramEvent) => {
+    console.log(e.diagram.selection.first()?.data)
+    setCurrentNode(e.diagram.selection.first()?.data as NodeModelType)
+  });
   diagram.addDiagramListener(
     "BackgroundContextClicked",
     (e: go.DiagramEvent) => {
+      setCurrentNode(null);
       e.diagram.lastInput.viewPoint &&
         diagram.model.addNodeData(
           generateNewNode(e.diagram.lastInput.documentPoint)
         );
     }
   );
+  diagram.addDiagramListener("BackgroundSingleClicked", (e: go.DiagramEvent) => {
+    setCurrentNode(null);
+  })
   // define a simple Node template
   diagram.nodeTemplate = NodeTemplate;
   diagram.linkTemplate = LinkTemplate;

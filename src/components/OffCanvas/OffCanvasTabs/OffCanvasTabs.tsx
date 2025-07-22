@@ -12,7 +12,7 @@ const OffCanvasTabs = ({
 }) => {
   return (
     <>
-      <Tabs defaultValue={"properties"} radius={"xs"} color="black">
+      <Tabs defaultValue={"file"} radius={"xs"} color="black">
         <Tabs.List grow>
           <Tabs.Tab value="file" leftSection={<FileIconSVG />}>
             File
