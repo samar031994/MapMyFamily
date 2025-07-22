@@ -7,36 +7,7 @@ import * as TS from "../components/Taskbar/Taskbar.style";
 import { Tooltip } from "react-tooltip";
 import LoginBtn from "@/components/LoginBtn";
 import { useSession } from "next-auth/react";
-
-const generateNewDiagramId = async (email: string) => {
-  const diagrams = await fetch("/api/mongo/getAllUserDiagrams?email=" + email)
-    .then((res) => {
-      console.log(res)
-      if (res.status === 404) {
-        console.log("No diagrams found for this user.");
-        // If no diagrams are found, return an empty array
-        return [];
-      }
-      return res.json();
-    })
-    .catch((err) => {
-      console.log("ERROR");
-      console.log(err);
-    });
-  if (!diagrams || diagrams.length === 0) {
-    console.log("No diagrams found for this user, creating a new one.");
-    console.log(email)
-    return `${email}_diagram_${1}`;
-  }
-  if (diagrams) {
-    console.log(diagrams);
-    diagrams.forEach((dia) => {
-      const counter =
-        dia.diagramId.split("_")[dia.diagramId.split("_").length - 1];
-      return `${email}_diagram_${counter + 1}`;
-    });
-  }
-};
+import crypto from "crypto";
 
 const LandingPage: React.FC = () => {
   const router = useRouter();
@@ -84,38 +55,17 @@ const LandingPage: React.FC = () => {
               alignItems: "center",
             }}
           >
-            <Button
-              style={{ width: "20%", margin: "10px" }}
-              variant="primary"
-              size="lg"
-              onClick={() => {
-                router.push("/familyTree/sandbox");
-              }}
-            >
-              Get Started
-            </Button>
-            {data?.user && (
-              <Button
-                style={{ width: "20%" }}
-                variant="primary"
-                size="lg"
-                onClick={() => router.replace("/dashboard")}
-              >
-                Dashboard
-              </Button>
-            )}
             {data?.user && (
               <Button
                 style={{ width: "20%", margin: "10px" }}
                 variant="primary"
                 size="lg"
                 onClick={async () => {
-                  const newKey = await generateNewDiagramId(data?.user?.email);
-                  console.log(newKey)
-                  router.replace("/familyTree/" + newKey);
+                  const hashedEmail = crypto.createHash("sha256").update(data.user?.email || "").digest("hex");
+                  router.replace("/familyTree/" + hashedEmail);
                 }}
               >
-                New Diagram
+                Your Family Tree
               </Button>
             )}
           </div>
