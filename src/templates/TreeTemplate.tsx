@@ -109,13 +109,13 @@ export const NodeTemplate = $(
     ),
     $(go.Panel,"Vertical",
       {
-        alignment: new go.Spot(0, 0.75),
+        alignment: new go.Spot(0, 0.7),
         alignmentFocus: go.Spot.Center,
       },
       $(
         go.Picture,
         {
-          margin: 8,
+          margin: 16,
           width: 48,
           height: 48,
           source: "https://cdn-icons-png.flaticon.com/512/149/149071.png", // Example avatar
