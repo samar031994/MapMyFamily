@@ -1,3 +1,4 @@
+import { NodeModelType } from "@/models/Tree.model";
 import * as go from "gojs";
 
 const $ = go.GraphObject.make;
@@ -42,12 +43,10 @@ export const NodeTemplate = $(
       },
       new go.Binding("fill", "gender", (g) => {
         switch (g) {
-          case "male":
+          case "Male":
             return "#587ff5";
-            break;
-          case "female":
+          case "Female":
             return "#f556dd";
-            break;
           default:
             return "#96e890";
         }
@@ -66,7 +65,11 @@ export const NodeTemplate = $(
           alignmentFocus: go.Spot.TopCenter,
           alignment: new go.Spot(0, 0.5),
         },
-        new go.Binding("text", "name").makeTwoWay() // Bind "key" data property to text
+        new go.Binding("location", "location").makeTwoWay(go.Point.parse),
+        new go.Binding("text", "name", (a) => {
+          console.log(a);
+          return a;
+        }).makeTwoWay()
       ),
       $(
         go.TextBlock,
@@ -81,7 +84,10 @@ export const NodeTemplate = $(
           alignmentFocus: go.Spot.BottomCenter,
           alignment: new go.Spot(0.5, 0.5),
         },
-        new go.Binding("text", "gender").makeTwoWay()
+        new go.Binding("text", "gender", (a: go.ObjectData) => {
+          console.log(a);
+          return a;
+        }).makeTwoWay()
       ),
       $(
         go.Panel,
@@ -89,7 +95,6 @@ export const NodeTemplate = $(
         $(
           go.TextBlock,
           {
-            cursor: "pointer",
             isMultiline: false,
             margin: 4,
             font: "10px sans-serif",
@@ -98,30 +103,33 @@ export const NodeTemplate = $(
             alignmentFocus: go.Spot.BottomCenter,
             alignment: new go.Spot(0.5, 0.5),
           },
-          new go.Binding("text", "birthYear").makeTwoWay()
-        ),
-        $(go.TextBlock, {
-          cursor: "pointer",
-          isMultiline: false,
-          text: " - ",
-          font: "10px sans-serif",
-          editable: false,
-        }),
-        $(
-          go.TextBlock,
-          {
-            cursor: "pointer",
-            isMultiline: false,
-            margin: 4,
-            font: "10px sans-serif",
-            stroke: "black",
-            editable: true,
-            alignmentFocus: go.Spot.BottomCenter,
-            alignment: new go.Spot(0.5, 0.5),
-          },
-          new go.Binding("text", "deathYear").makeTwoWay()
+          new go.Binding("text", "city").makeTwoWay()
         )
       )
+    ),
+    $(go.Panel,"Vertical",
+      {
+        alignment: new go.Spot(0, 0.7),
+        alignmentFocus: go.Spot.Center,
+      },
+      $(
+        go.Picture,
+        {
+          margin: 16,
+          width: 48,
+          height: 48,
+          source: "https://cdn-icons-png.flaticon.com/512/149/149071.png", // Example avatar
+        },
+        new go.Binding("source", "gender", (g) => {
+          switch (g) {
+            // case "Male": return '/male.svg';
+            // case "Female": return '/female.svg';
+            default: return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+          }
+        })
+        // Optionally bind to a property like "avatar" if you want dynamic images:
+        // new go.Binding("source", "avatar")
+      ),
     )
   ),
   // Ports

@@ -22,3 +22,7 @@ export interface DiagramModelType {
     nodes: NodeModelType[],
     links: LinkModelType[]
 }
+
+export interface DiagramActions {
+    applyChanges: (currentNode:NodeModelType) => void,
+}

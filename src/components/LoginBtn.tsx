@@ -33,7 +33,6 @@ const LoginBtn = () => {
           >
             Home
           </Menu.Item>
-          <Menu.Item>Dashboard</Menu.Item>
         </Menu.Dropdown>
       </Menu>
     );

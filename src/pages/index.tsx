@@ -6,9 +6,12 @@ import { useRouter } from "next/router";
 import * as TS from "../components/Taskbar/Taskbar.style";
 import { Tooltip } from "react-tooltip";
 import LoginBtn from "@/components/LoginBtn";
+import { useSession } from "next-auth/react";
+import crypto from "crypto";
 
 const LandingPage: React.FC = () => {
   const router = useRouter();
+  const { data } = useSession();
   const [tooltipVisible, setTooltipVisible] = useState(false);
   return (
     <>
@@ -44,15 +47,28 @@ const LandingPage: React.FC = () => {
           <p className="lead">
             A powerful web application to map and explore your family tree.
           </p>
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => {
-              router.push("/familyTree/sandbox");
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              flexDirection: "column",
+              alignItems: "center",
             }}
           >
-            Get Started
-          </Button>
+            {data?.user && (
+              <Button
+                style={{ width: "20%", margin: "10px" }}
+                variant="primary"
+                size="lg"
+                onClick={async () => {
+                  const hashedEmail = crypto.createHash("sha256").update(data.user?.email || "").digest("hex");
+                  router.replace("/familyTree/" + hashedEmail);
+                }}
+              >
+                Your Family Tree
+              </Button>
+            )}
+          </div>
         </Container>
       </header>
 
