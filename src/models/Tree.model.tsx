@@ -1,28 +1,29 @@
-import * as go from 'gojs'
+import * as go from "gojs";
 
 export interface NodeModelType {
-    key:string,
-    name: string,
-    birthYear: string,
-    deathYear: string,
-    city: string
-    gender: string,
-    location: string
+  key: string;
+  name: string;
+  birthYear: string;
+  deathYear: string;
+  city: string;
+  gender: string;
+  location: string;
+  spouseExists?: boolean;
 }
 
 export interface LinkModelType {
-    key: string,
-    fromNode: string,
-    toNode: string,
-    fromPort: string,
-    toPort: string
+  key: string;
+  fromNode: string;
+  toNode: string;
+  fromPort: string;
+  toPort: string;
 }
 
 export interface DiagramModelType {
-    nodes: NodeModelType[],
-    links: LinkModelType[]
+  nodes: NodeModelType[];
+  links: LinkModelType[];
 }
 
 export interface DiagramActions {
-    applyChanges: (currentNode:NodeModelType) => void,
+  applyChanges: (currentNode: NodeModelType) => void;
 }

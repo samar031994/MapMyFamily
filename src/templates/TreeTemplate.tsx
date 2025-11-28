@@ -1,5 +1,6 @@
 import { NodeModelType } from "@/models/Tree.model";
 import * as go from "gojs";
+import build from "next/dist/build";
 
 const $ = go.GraphObject.make;
 
@@ -22,11 +23,25 @@ export const LinkNodeTemplate = $(go.Node, "Auto", {
   makePort("B", go.Spot.Bottom, true, true)
 );
 
+export const buildContextMenu = () => {
+  return $(
+    "ContextMenu",
+    $("ContextMenuButton", $(go.TextBlock, "Add spouse"), {
+      click: (e: go.InputEvent, obj: go.GraphObject) => {
+        e.diagram.model.commit((m: go.Model) => {
+          m.setDataProperty(obj.part?.data, "spouseExists", true);
+        });
+      },
+    })
+  );
+};
+
 export const NodeTemplate = $(
   go.Node,
   "Spot",
   {
     locationSpot: go.Spot.Center,
+    contextMenu: buildContextMenu(),
   },
   new go.Binding("location", "location").makeTwoWay(go.Point.stringify),
   $(
@@ -39,7 +54,7 @@ export const NodeTemplate = $(
         width: 250,
         height: 150,
         fill: "#96e890", // Default color
-        strokeWidth: 1, // Border width
+        strokeWidth: 4, // Border width
       },
       new go.Binding("fill", "gender", (g) => {
         switch (g) {
@@ -107,7 +122,9 @@ export const NodeTemplate = $(
         )
       )
     ),
-    $(go.Panel,"Vertical",
+    $(
+      go.Panel,
+      "Vertical",
       {
         alignment: new go.Spot(0, 0.7),
         alignmentFocus: go.Spot.Center,
@@ -124,19 +141,36 @@ export const NodeTemplate = $(
           switch (g) {
             // case "Male": return '/male.svg';
             // case "Female": return '/female.svg';
-            default: return 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+            default:
+              return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
           }
         })
         // Optionally bind to a property like "avatar" if you want dynamic images:
         // new go.Binding("source", "avatar")
-      ),
+      )
     )
   ),
   // Ports
   makePort("T", go.Spot.Top, true, true),
-  makePort("L", go.Spot.Left, true, true),
-  makePort("R", go.Spot.Right, true, true),
-  makePort("B", go.Spot.Bottom, true, true)
+  makePort("B", go.Spot.Bottom, true, true),
+  $(
+    go.Panel,
+    "Auto",
+    {
+      alignment: go.Spot.Right,
+      alignmentFocus: go.Spot.Left,
+    },
+    $(go.Shape, "RoundedRectangle", {
+      width: 250,
+      height: 150,
+      fill: "#96e890", // Default color
+      strokeWidth: 1, // Border width
+      margin: new go.Margin(0, 0, 0, 4),
+    }),
+    new go.Binding("visible", "", (data: NodeModelType) => {
+      return data.spouseExists ? true : false;
+    })
+  )
 );
 
 export const LinkTemplate = new go.Link({

@@ -24,6 +24,7 @@ export const generateNewNode = (mouseLoc: go.Point) => {
     city: "",
     location: mouseLoc,
     category: "Node",
+    spouseExists: false,
   };
   return newNode;
 };
