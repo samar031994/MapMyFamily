@@ -1,27 +1,7 @@
 import { NodeModelType } from "@/models/Tree.model";
 import * as go from "gojs";
-import build from "next/dist/build";
 
 const $ = go.GraphObject.make;
-
-export const LinkNodeTemplate = $(go.Node, "Auto", {
-  toLinkable: false,
-  fromLinkable: false,
-  selectable: false,
-  avoidable: false,
-  layerName: "Foreground",
-}).add(
-  new go.Shape("Ellipse", {
-    width: 20,
-    height: 5,
-    stroke: null,
-    portId: "linkNodePort",
-    fromLinkable: true,
-    toLinkable: false,
-    cursor: "pointer",
-  }),
-  makePort("B", go.Spot.Bottom, true, true)
-);
 
 export const buildContextMenu = () => {
   return $(
