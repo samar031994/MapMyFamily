@@ -1,5 +1,6 @@
 import { NodeModelType } from "@/models/Tree.model";
 import * as go from "gojs";
+import build from "next/dist/build";
 
 const $ = go.GraphObject.make;
 
@@ -24,6 +25,7 @@ export const NodeTemplate = $(
     contextMenu: buildContextMenu(),
   },
   new go.Binding("location", "location").makeTwoWay(go.Point.stringify),
+  // Main node panel
   $(
     go.Panel,
     "Auto",
@@ -49,7 +51,7 @@ export const NodeTemplate = $(
     ),
     $(go.Panel, "Vertical").add(
       $(
-        go.TextBlock, //Name textBlock
+        go.TextBlock, // Name textBlock
         {
           cursor: "pointer",
           isMultiline: false,
@@ -61,15 +63,11 @@ export const NodeTemplate = $(
           alignment: new go.Spot(0, 0.5),
         },
         new go.Binding("location", "location").makeTwoWay(go.Point.parse),
-        new go.Binding("text", "name", (a) => {
-          console.log(a);
-          return a;
-        }).makeTwoWay()
+        new go.Binding("text", "name", (a) => a).makeTwoWay()
       ),
       $(
         go.TextBlock,
         {
-          // textEditor: window.TextEditorSelectBox,
           margin: 8,
           cursor: "pointer",
           isMultiline: false,
@@ -79,10 +77,7 @@ export const NodeTemplate = $(
           alignmentFocus: go.Spot.BottomCenter,
           alignment: new go.Spot(0.5, 0.5),
         },
-        new go.Binding("text", "gender", (a: go.ObjectData) => {
-          console.log(a);
-          return a;
-        }).makeTwoWay()
+        new go.Binding("text", "gender", (a: go.ObjectData) => a).makeTwoWay()
       ),
       $(
         go.Panel,
@@ -115,24 +110,18 @@ export const NodeTemplate = $(
           margin: 16,
           width: 48,
           height: 48,
-          source: "https://cdn-icons-png.flaticon.com/512/149/149071.png", // Example avatar
+          source: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
         },
         new go.Binding("source", "gender", (g) => {
           switch (g) {
-            // case "Male": return '/male.svg';
-            // case "Female": return '/female.svg';
             default:
               return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
           }
         })
-        // Optionally bind to a property like "avatar" if you want dynamic images:
-        // new go.Binding("source", "avatar")
       )
     )
   ),
-  // Ports
-  makePort("T", go.Spot.Top, true, true),
-  makePort("B", go.Spot.Bottom, true, true),
+  // Spouse panel (only visible if spouseExists)
   $(
     go.Panel,
     "Auto",
@@ -140,17 +129,94 @@ export const NodeTemplate = $(
       alignment: go.Spot.Right,
       alignmentFocus: go.Spot.Left,
     },
-    $(go.Shape, "RoundedRectangle", {
-      width: 250,
-      height: 150,
-      fill: "#96e890", // Default color
-      strokeWidth: 1, // Border width
-      margin: new go.Margin(0, 0, 0, 4),
-    }),
-    new go.Binding("visible", "", (data: NodeModelType) => {
-      return data.spouseExists ? true : false;
-    })
-  )
+    new go.Binding("visible", "", (data: NodeModelType) => !!data.spouseExists),
+    $(
+      go.Shape,
+      "RoundedRectangle",
+      {
+        width: 250,
+        height: 150,
+        fill: "#96e890",
+        strokeWidth: 4,
+        opacity: 0.5, // Slightly transparent
+        margin: new go.Margin(0, 0, 0, 20),
+      },
+      new go.Binding("fill", "", (g: NodeModelType) => {
+        const spouseGender = g.spouse?.gender;
+        switch (spouseGender) {
+          case "Male":
+            return "#587ff5";
+          case "Female":
+            return "#f556dd";
+          default:
+            return "#96e890";
+        }
+      })
+    ),
+    $(go.Panel, "Vertical").add(
+      $(
+        go.TextBlock,
+        {
+          cursor: "pointer",
+          isMultiline: false,
+          margin: 8,
+          font: "bold 16px sans-serif",
+          stroke: "black",
+          editable: false, // Not editable
+          alignmentFocus: go.Spot.TopCenter,
+          alignment: new go.Spot(0, 0.5),
+        },
+        new go.Binding("text", "", (x: NodeModelType) => {
+          const spouseName = x.spouse?.name;
+          return spouseName || "Spouse Name";
+        })
+      ),
+      $(
+        go.TextBlock,
+        {
+          margin: 8,
+          cursor: "pointer",
+          isMultiline: false,
+          font: "14px sans-serif",
+          stroke: "black",
+          editable: false,
+          alignmentFocus: go.Spot.BottomCenter,
+          alignment: new go.Spot(0.5, 0.5),
+        },
+        new go.Binding("text", "spouseGender", (x: NodeModelType) => {
+          return x.spouse?.gender || "Gender";
+        }).makeTwoWay()
+      )
+    ),
+    $(
+      go.Panel,
+      "Vertical",
+      {
+        alignment: new go.Spot(0, 0.7),
+        alignmentFocus: go.Spot.Center,
+      },
+      $(
+        go.Picture,
+        {
+          margin: 16,
+          width: 48,
+          height: 48,
+          opacity: 0.5, // Slightly transparent
+          source: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+        },
+        new go.Binding("source", "spouseGender", (g) => {
+          switch (g) {
+            // You can use different images for spouse gender if desired
+            default:
+              return "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+          }
+        })
+      )
+    )
+  ),
+  // Ports for main node only
+  makePort("T", go.Spot.Top, true, true),
+  makePort("B", go.Spot.Bottom, true, true)
 );
 
 export const LinkTemplate = new go.Link({

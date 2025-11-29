@@ -88,6 +88,12 @@ const TreeDiagram = () => {
         m.setDataProperty(node?.data, "city", currentNode.city);
         m.setDataProperty(node?.data, "birthYear", currentNode.birthYear);
         m.setDataProperty(node?.data, "deathYear", currentNode.deathYear);
+        m.setDataProperty(
+          node?.data,
+          "spouseExists",
+          currentNode.spouseExists || false
+        );
+        m.setDataProperty(node?.data, "spouse", currentNode.spouse);
       });
     }
   };

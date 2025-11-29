@@ -10,6 +10,9 @@ const OffCanvasPanelProperties = () => {
   const [deathDate, setDeathDate] = useState<Date | null>(null);
   const [currentNode, setCurrentNode] = useAtom(G.SelectedNodeAtom);
   const [diagramActions, setDiagramActions] = useAtom(G.DiagramActionsAtom);
+  if (!currentNode) {
+    return <div style={{ margin: "8px" }}>No node selected</div>;
+  }
   return (
     <>
       <Fieldset
@@ -56,17 +59,65 @@ const OffCanvasPanelProperties = () => {
           }}
         >
           <Stack>
-            <Radio
-              value={"Male"}
-              label="Male"
-            />
-            <Radio
-              value={"Female"}
-              label="Female"
-            />
+            <Radio value={"Male"} label="Male" />
+            <Radio value={"Female"} label="Female" />
           </Stack>
         </Radio.Group>
       </Fieldset>
+      {currentNode?.spouseExists && (
+        <Fieldset
+          legend="Spouse Details"
+          variant="default"
+          style={{ backgroundColor: "inherit", margin: "4px 4px 4px 4px" }}
+          id="spouseDetails"
+        >
+          <Fieldset
+            legend="Spouse Name"
+            variant="default"
+            style={{ backgroundColor: "inherit", margin: "4px 4px 4px 4px" }}
+            id="spouseName"
+          >
+            <TextInput
+              label="Spouse Name"
+              placeholder={currentNode?.spouse?.name ? "" : "Enter spouse name"}
+              value={currentNode?.spouse?.name || ""}
+              onChange={(e) => {
+                setCurrentNode({
+                  ...(currentNode as NodeModelType),
+                  spouse: {
+                    ...(currentNode?.spouse as any),
+                    name: e.currentTarget.value,
+                  },
+                });
+              }}
+            />
+          </Fieldset>
+          <Fieldset
+            legend="Spouse Gender"
+            variant="default"
+            style={{ backgroundColor: "inherit", margin: "4px 4px 4px 4px" }}
+            id="spouseGender"
+          >
+            <Radio.Group
+              value={currentNode?.spouse?.gender || ""}
+              onChange={(value) => {
+                setCurrentNode({
+                  ...(currentNode as NodeModelType),
+                  spouse: {
+                    ...(currentNode?.spouse as any),
+                    gender: value,
+                  },
+                });
+              }}
+            >
+              <Stack>
+                <Radio value={"Male"} label="Male" />
+                <Radio value={"Female"} label="Female" />
+              </Stack>
+            </Radio.Group>
+          </Fieldset>
+        </Fieldset>
+      )}
       {/* <Fieldset id="Date" variant="default" legend="lifetime">
         <YearPickerInput
           dropdownType="modal"

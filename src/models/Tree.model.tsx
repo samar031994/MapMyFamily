@@ -1,5 +1,12 @@
 import * as go from "gojs";
 
+export interface SpouseType {
+  name: string;
+  birthYear: string;
+  deathYear: string;
+  gender: string;
+}
+
 export interface NodeModelType {
   key: string;
   name: string;
@@ -9,6 +16,7 @@ export interface NodeModelType {
   gender: string;
   location: string;
   spouseExists?: boolean;
+  spouse?: SpouseType;
 }
 
 export interface LinkModelType {
