@@ -4,17 +4,12 @@ import { ReactDiagram } from "gojs-react";
 import * as go from "gojs";
 import * as DS from "./Diagram.style";
 import Taskbar from "../Taskbar/Taskbar";
-import {
-  NodeTemplate,
-  LinkTemplate,
-  LinkNodeTemplate,
-} from "@/templates/TreeTemplate";
+import { NodeTemplate, LinkTemplate } from "@/templates/TreeTemplate";
 import { generateNewNode, getLargestKey } from "@/utils/Diagram.utils";
 import * as TA from "../../models/Tree.atoms";
-import * as G from "../Global.atoms"
+import * as G from "../Global.atoms";
 import { useAtom } from "jotai";
 import { NodeModelType } from "@/models/Tree.model";
-
 
 const $ = go.GraphObject.make;
 const TreeDiagram = () => {
@@ -48,8 +43,8 @@ const TreeDiagram = () => {
   diagram.grid.gridCellSize = new go.Size(10, 20);
   diagram.toolManager.draggingTool.isGridSnapEnabled = true;
   diagram.addDiagramListener("ObjectSingleClicked", (e: go.DiagramEvent) => {
-    console.log(e.diagram.selection.first()?.data)
-    setCurrentNode(e.diagram.selection.first()?.data as NodeModelType)
+    console.log(e.diagram.selection.first()?.data);
+    setCurrentNode(e.diagram.selection.first()?.data as NodeModelType);
   });
   diagram.addDiagramListener(
     "BackgroundContextClicked",
@@ -61,13 +56,15 @@ const TreeDiagram = () => {
         );
     }
   );
-  diagram.addDiagramListener("BackgroundSingleClicked", (e: go.DiagramEvent) => {
-    setCurrentNode(null);
-  })
+  diagram.addDiagramListener(
+    "BackgroundSingleClicked",
+    (e: go.DiagramEvent) => {
+      setCurrentNode(null);
+    }
+  );
   // define a simple Node template
   diagram.nodeTemplate = NodeTemplate;
   diagram.linkTemplate = LinkTemplate;
-  diagram.nodeTemplateMap.add("LinkLabel", LinkNodeTemplate);
   diagram.toolManager.linkingTool.archetypeLabelNodeData = {
     category: "LinkLabel",
   };
@@ -83,22 +80,28 @@ const TreeDiagram = () => {
 
   const applyChanges = (currentNode: NodeModelType) => {
     const diagram = diagramRef.current;
-    const node = diagram.findNodeForKey(currentNode.key)
+    const node = diagram.findNodeForKey(currentNode.key);
     if (currentNode) {
       diagram.model.commit((m: go.Model) => {
-        m.setDataProperty(node?.data, "name", currentNode.name)
-        m.setDataProperty(node?.data,"gender", currentNode.gender)
-        m.setDataProperty(node?.data,"city", currentNode.city)
-        m.setDataProperty(node?.data,"birthYear", currentNode.birthYear)
-        m.setDataProperty(node?.data,"deathYear", currentNode.deathYear)
-      })
+        m.setDataProperty(node?.data, "name", currentNode.name);
+        m.setDataProperty(node?.data, "gender", currentNode.gender);
+        m.setDataProperty(node?.data, "city", currentNode.city);
+        m.setDataProperty(node?.data, "birthYear", currentNode.birthYear);
+        m.setDataProperty(node?.data, "deathYear", currentNode.deathYear);
+        m.setDataProperty(
+          node?.data,
+          "spouseExists",
+          currentNode.spouseExists || false
+        );
+        m.setDataProperty(node?.data, "spouse", currentNode.spouse);
+      });
     }
-  }
+  };
   useEffect(() => {
-     setDiagramActions({
-    applyChanges: applyChanges,
-  });
-  },[])
+    setDiagramActions({
+      applyChanges: applyChanges,
+    });
+  }, []);
   return (
     <>
       <DS.DiagramWrapper>
