@@ -1,3 +1,4 @@
+import { FethchedDiagramType } from "@/models/Tree.model";
 import { Session } from "next-auth";
 
 export const saveDiagram = (
@@ -25,4 +26,20 @@ export const saveDiagram = (
       console.log("Error saving diagram");
       console.error(err);
     });
+};
+
+export const fetchDiagram = async (diagramId: string) => {
+  const response = await fetch("/api/mongo/getTree?diagramId=" + diagramId, {
+    method: "GET",
+    headers: { "content-type": "application/json" },
+  });
+  const data = await response.json();
+  if (data) {
+    return data[0] as FethchedDiagramType;
+  } else
+    return {
+      diagramId: diagramId,
+      modelData: { nodes: [], links: [] },
+      savedBy: "",
+    };
 };

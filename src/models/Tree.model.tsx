@@ -1,5 +1,11 @@
 import * as go from "gojs";
 
+export interface FethchedDiagramType {
+  diagramId: string;
+  modelData: DiagramModelType;
+  savedBy: string;
+}
+
 export interface SpouseType {
   name: string;
   birthYear: string;

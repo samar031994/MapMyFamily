@@ -9,14 +9,17 @@ import { generateNewNode, getLargestKey } from "@/utils/Diagram.utils";
 import * as TA from "../../models/Tree.atoms";
 import * as G from "../Global.atoms";
 import { useAtom } from "jotai";
-import { NodeModelType } from "@/models/Tree.model";
+import { FethchedDiagramType, NodeModelType } from "@/models/Tree.model";
 
 const $ = go.GraphObject.make;
-const TreeDiagram = () => {
-  const [diagramModel, setDiagramModel] = useAtom(TA.DiagramDataAtom);
+const TreeDiagram = ({
+  diagramModel,
+}: {
+  diagramModel: FethchedDiagramType;
+}) => {
+  const modelData = diagramModel.modelData;
   const [, setCurrentNode] = useAtom(G.SelectedNodeAtom);
   const [diagramActions, setDiagramActions] = useAtom(G.DiagramActionsAtom);
-  const [show, setShow] = useAtom(TA.MenuAtom);
   // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
   const diagram = new go.Diagram({
     "undoManager.isEnabled": true, // must be set to allow for model change listening
@@ -65,9 +68,6 @@ const TreeDiagram = () => {
   // define a simple Node template
   diagram.nodeTemplate = NodeTemplate;
   diagram.linkTemplate = LinkTemplate;
-  diagram.toolManager.linkingTool.archetypeLabelNodeData = {
-    category: "LinkLabel",
-  };
   (diagram.model as go.GraphLinksModel).makeUniqueLinkKeyFunction = (
     m: go.GraphLinksModel,
     data: go.ObjectData
@@ -77,6 +77,8 @@ const TreeDiagram = () => {
   diagram.model.makeUniqueKeyFunction = (m: go.Model, data: go.ObjectData) => {
     return `node:${getLargestKey(m.nodeDataArray)}`;
   };
+  diagram.model.nodeDataArray = modelData.nodes;
+  (diagram.model as go.GraphLinksModel).linkDataArray = modelData.links;
 
   const applyChanges = (currentNode: NodeModelType) => {
     const diagram = diagramRef.current;
@@ -107,7 +109,6 @@ const TreeDiagram = () => {
       <DS.DiagramWrapper>
         <Taskbar diagramRef={diagramRef} />
         <ReactDiagram
-          //ref={diagramRef}
           divClassName="diagram-component"
           initDiagram={() => {
             return diagram;
