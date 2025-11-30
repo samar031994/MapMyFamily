@@ -137,7 +137,6 @@ export const NodeTemplate = $(
         width: 250,
         height: 150,
         fill: "#96e890",
-        strokeWidth: 4,
         opacity: 0.5, // Slightly transparent
         margin: new go.Margin(0, 0, 0, 20),
       },
