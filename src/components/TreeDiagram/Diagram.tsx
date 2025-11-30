@@ -17,7 +17,9 @@ const TreeDiagram = ({
 }: {
   diagramModel: FethchedDiagramType;
 }) => {
-  const modelData = diagramModel.modelData;
+  const modelData = diagramModel
+    ? diagramModel.modelData
+    : { nodes: [], links: [] };
   const [, setCurrentNode] = useAtom(G.SelectedNodeAtom);
   const [diagramActions, setDiagramActions] = useAtom(G.DiagramActionsAtom);
   // set your license key here before creating the diagram: go.Diagram.licenseKey = "...";
