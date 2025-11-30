@@ -29,17 +29,19 @@ export const saveDiagram = (
 };
 
 export const fetchDiagram = async (diagramId: string) => {
+  console.log(diagramId);
   const response = await fetch("/api/mongo/getTree?diagramId=" + diagramId, {
     method: "GET",
     headers: { "content-type": "application/json" },
   });
   const data = await response.json();
-  if (data) {
+  if (response.status === 200) {
     return data[0] as FethchedDiagramType;
-  } else
+  } else if (response.status === 404) {
     return {
       diagramId: diagramId,
       modelData: { nodes: [], links: [] },
       savedBy: "",
-    };
+    } as FethchedDiagramType;
+  }
 };

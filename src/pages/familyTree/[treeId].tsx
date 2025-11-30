@@ -11,15 +11,20 @@ const FamilyTree = () => {
   const TreeDiagram = dynamic(import("../../components/TreeDiagram/Diagram"));
   const router = useRouter();
   const { treeId } = router.query;
+  console.log(treeId);
   const [diagramData, setDiagramData] = useState<FethchedDiagramType | null>(
     null
   );
   useEffect(() => {
     if (treeId) {
       fetchDiagram(treeId as string)
-        .then((data: FethchedDiagramType) => {
-          setDiagramData(data);
-          console.log(data);
+        .then((data: FethchedDiagramType | undefined) => {
+          if (data) {
+            setDiagramData(data);
+            console.log(data);
+          } else {
+            console.error("No diagram data returned");
+          }
         })
         .catch((err) => {
           console.error(err);

@@ -24,8 +24,8 @@ export const NodeTemplate = $(
     locationSpot: go.Spot.Center,
     contextMenu: buildContextMenu(),
   },
-  new go.Binding("location", "", (x: NodeModelType) => {
-    return go.Point.parse(x.location);
+  new go.Binding("location", "location", (x: string) => {
+    return go.Point.parse(x);
   }).makeTwoWay(go.Point.stringify),
   // Main node panel
   $(
