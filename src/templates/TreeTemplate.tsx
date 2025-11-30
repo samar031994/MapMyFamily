@@ -230,6 +230,7 @@ export const LinkTemplate = new go.Link({
   relinkableTo: true,
   reshapable: true,
   resegmentable: true,
+  adjusting: go.LinkAdjusting.End,
 })
   .bindTwoWay("points")
   .add(

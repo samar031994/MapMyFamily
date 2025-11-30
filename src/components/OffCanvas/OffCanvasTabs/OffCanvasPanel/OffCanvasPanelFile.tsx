@@ -2,10 +2,16 @@ import React from "react";
 import * as S from "./OffCanvasPanel.style";
 import { Button } from "@mantine/core";
 import { convertDiagramData } from "@/utils/Diagram.utils";
-import { LinkModelType, NodeModelType } from "@/models/Tree.model";
+import {
+  FethchedDiagramType,
+  LinkModelType,
+  NodeModelType,
+} from "@/models/Tree.model";
 import { useRouter } from "next/router";
 import { saveDiagram } from "@/services/TreeDiagram/TreeDiagram.service";
 import { useSession } from "next-auth/react";
+import * as G from "../../../Global.atoms";
+import { useAtom } from "jotai";
 
 const OffCanvasPanelFile = ({
   diagramRef,
@@ -15,6 +21,7 @@ const OffCanvasPanelFile = ({
   const { data } = useSession();
   const router = useRouter();
   const dia_id = router.query["treeId"];
+  const [diagramObjectId] = useAtom(G.DiagramObjectIdAtom);
   return (
     <S.PanelWrapper>
       <Button
@@ -31,10 +38,11 @@ const OffCanvasPanelFile = ({
               modelData: diaToSave,
               diagramId: dia_id,
               savedBy: data.user.email,
-            }
-            dia_id !== "sandbox" && saveDiagram(saveJson, data, dia_id as string);
-          }
-          else {
+              _id: diagramObjectId,
+            } as FethchedDiagramType;
+            dia_id !== "sandbox" &&
+              saveDiagram(saveJson, data, dia_id as string);
+          } else {
             // TODO: Prompt sign in or add snackbar error message
           }
         }}

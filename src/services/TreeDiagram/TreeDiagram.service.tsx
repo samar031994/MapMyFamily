@@ -2,7 +2,7 @@ import { FethchedDiagramType } from "@/models/Tree.model";
 import { Session } from "next-auth";
 
 export const saveDiagram = (
-  diagramData: any,
+  diagramData: FethchedDiagramType,
   data: Session,
   diagramId: string
 ) => {

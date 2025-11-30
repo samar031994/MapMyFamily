@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { SSRProvider } from "react-bootstrap";
 import { fetchDiagram } from "@/services/TreeDiagram/TreeDiagram.service";
 import { FethchedDiagramType } from "@/models/Tree.model";
+import { useAtom } from "jotai";
+import * as G from "../../components/Global.atoms";
 
 const FamilyTree = () => {
   const TreeDiagram = dynamic(import("../../components/TreeDiagram/Diagram"));
@@ -15,12 +17,15 @@ const FamilyTree = () => {
   const [diagramData, setDiagramData] = useState<FethchedDiagramType | null>(
     null
   );
+  const [objectId, setObjectId] = useAtom(G.DiagramObjectIdAtom);
   useEffect(() => {
     if (treeId) {
       fetchDiagram(treeId as string)
         .then((data: FethchedDiagramType | undefined) => {
           if (data) {
+            console.log(data);
             setDiagramData(data);
+            setObjectId(data._id || null);
             console.log(data);
           } else {
             console.error("No diagram data returned");
