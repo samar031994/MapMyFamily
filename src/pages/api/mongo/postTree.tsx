@@ -1,5 +1,7 @@
 import clientPromise from "../../../lib/mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
+import { ObjectId } from "mongodb";
+import { FethchedDiagramType } from "@/models/Tree.model";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const modelData = req.body;
@@ -17,8 +19,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (trees.length > 1) {
       res.status(500).json({ message: "More than one diagram found." });
     } else {
-      console.log("UPDATE");
-      //PUT Tree
+      console.log(modelData);
+      await db
+        .collection("TreeDiagram")
+        .updateOne({ diagramId: modelData.diagramId }, { $set: modelData });
+      console.log("UPDATE SUCCESS");
     }
     res.json(trees);
   } catch (e) {

@@ -24,7 +24,9 @@ export const NodeTemplate = $(
     locationSpot: go.Spot.Center,
     contextMenu: buildContextMenu(),
   },
-  new go.Binding("location", "location").makeTwoWay(go.Point.stringify),
+  new go.Binding("location", "location", (x: string) => {
+    return go.Point.parse(x);
+  }).makeTwoWay(go.Point.stringify),
   // Main node panel
   $(
     go.Panel,
@@ -228,10 +230,7 @@ export const LinkTemplate = new go.Link({
   relinkableTo: true,
   reshapable: true,
   resegmentable: true,
-  // mouse-overs subtly highlight links:
-  // mouseEnter: (e:go.InputEvent, link) => (link.findObject('HIGHLIGHT').stroke = link.diagram.themeManager.findValue('linkOver', 'colors')),
-  // mouseLeave: (e, link) => (link.findObject('HIGHLIGHT').stroke = 'transparent'),
-  // context-click creates an editable link label
+  adjusting: go.LinkAdjusting.End,
 })
   .bindTwoWay("points")
   .add(
